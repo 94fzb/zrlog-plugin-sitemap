@@ -1,0 +1,6 @@
+# sitemap
+
+```shell
+export JAVA_HOME=${HOME}/dev/graalvm-jdk-latest
+export PATH=${JAVA_HOME}/bin:$PATH
+```
