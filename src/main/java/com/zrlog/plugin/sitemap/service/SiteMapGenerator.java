@@ -37,17 +37,14 @@ public class SiteMapGenerator {
         rawContent.add(title).add(link).add(language).add(description);
         for (Article article : articles) {
             sitemapContent.append("    <url>\n");
-            sitemapContent.append("      <loc><![CDATA[").append(article.getLink()).append("]]></loc>\n");
-            sitemapContent.append("      <lastmod><![CDATA[").append(article.getPubDate()).append("]]></lastmod>\n");
+            sitemapContent.append("      <loc>").append(article.getLink()).append("</loc>\n");
+            sitemapContent.append("      <lastmod>").append(article.getPubDate()).append("></lastmod>\n");
             sitemapContent.append("      <changefreq>").append("monthly").append("</changefreq>\n");
             sitemapContent.append("      <priority>").append("0.8").append("</priority>\n");
             sitemapContent.append("    </url>\n");
             //compare
-            rawContent.add(article.getTitle());
             rawContent.add(article.getLink());
-            rawContent.add(article.getDescription());
             rawContent.add(article.getPubDate());
-            rawContent.add(article.getGuid());
         }
 
         sitemapContent.append("</urlset>\n");

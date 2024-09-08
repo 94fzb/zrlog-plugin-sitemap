@@ -13,12 +13,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class FeedService {
@@ -27,16 +21,6 @@ public class FeedService {
 
     public FeedService(IOSession session) {
         this.session = session;
-    }
-
-    private static String toGMTString(Date date) {
-        Instant instant = date.toInstant();
-        // 将Instant转换为ZonedDateTime，指定GMT时区
-        ZonedDateTime zonedDateTime = instant.atZone(ZoneId.of("GMT"));
-        // 创建一个DateTimeFormatter并指定为Cookie过期日期的格式
-        DateTimeFormatter cookieExpireFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'", java.util.Locale.ENGLISH);
-        // 使用DateTimeFormatter格式化日期时间为Cookie的过期日期格式
-        return zonedDateTime.format(cookieExpireFormatter);
     }
 
     public SiteMapResultInfo feed() {
@@ -50,14 +34,9 @@ public class FeedService {
             List<Map<String, Object>> rows = (List<Map<String, Object>>) data.get("rows");
             List<Article> articles = new ArrayList<>();
             rows.forEach(e -> {
-                try {
-                    Date releaseTime = new SimpleDateFormat("yyyy-MM-dd").parse((String) e.get("releaseTime"));
-                    String pubDate = toGMTString(releaseTime);
-                    articles.add(new Article((String) e.get("title"), "https:" + e.get("url"),
-                            Objects.requireNonNullElse((String) e.get("content"), ""), pubDate, ((Double) e.get("id")).longValue() + ""));
-                } catch (ParseException ex) {
-                    throw new RuntimeException(ex);
-                }
+                String pubDate = (String) e.get("releaseTime");
+                articles.add(new Article((String) e.get("title"), "https:" + e.get("url"),
+                        Objects.requireNonNullElse((String) e.get("content"), ""), pubDate, ((Double) e.get("id")).longValue() + ""));
             });
             //httpClient.close();
             return SiteMapGenerator.generateSitemap(publicInfo.getTitle(), publicInfo.getHomeUrl(), "", articles);
