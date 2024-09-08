@@ -1,5 +1,11 @@
 # sitemap
 
+> zrlog sitemap plugin
+
+## sitemap protocol
+
+https://www.sitemaps.org/protocol.html
+
 ```shell
 export JAVA_HOME=${HOME}/dev/graalvm-jdk-latest
 export PATH=${JAVA_HOME}/bin:$PATH
